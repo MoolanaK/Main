@@ -1,0 +1,66 @@
+# Please discuss your architectural decisions below.
+
+High Level Architecture:
+
+	MVC
+	To keep the code simple, a partial MVC was implemented.
+	
+	Model
+	The Model captures enough information to re-draw the sketch of
+	the user.
+	
+	View+Controller
+	There is a View class as well as a few, what we call, view components.
+	The View class capturing the JFrame as well
+	as containing all of its components.
+	View components are meant to be contained in the main View.
+	Examples of view components are PaintPanel and ShapeChooserPanel.
+	
+	The View class, and view components all implements their own controller.
+	For example, the PaintPanel listens to its own MouseEvents.
+	This is instead of separating out the Controller from the View. This choice
+	was made to simplify the code, yet still keep it modular and clear.
+	
+	Each view component can see the containing View as well as the Model
+	as appropriate. This means that each view component can speak to the
+	other view components. An example of this is when the ShapeChooserPanel
+	buttons are clicked, resulting in a mode change in the PaintPanel.
+	
+---------------------------------------------------------------------
+TODO!!! Add in more architecture and discussion. For example, 
+do you do something interesting to fix the association between the 
+ShapeChooser and the PaintPanel? How about the PaintModel, something
+is clearly wrong with it. Can you come up with a better architecture?
+---------------------------------------------------------------------
+
+DESIGN PATTERNS USED
+	TODO!!! If you introduce a Design Pattern to solve a problem, 
+	discuss it below. Only add design patterns if they simplify and improve
+	the code. I see at least two that would greatly improve code. 
+		
+	Strategy:
+		Instead of having a collection of if statements in mouse listeners, we have
+		multiple Shape Strategy's that that implement the mouse listener and are called
+		upon when their mode is selected.
+	Command: 
+		Each shape is a command and on execute it draws itself onto a graphics context,
+		the model stores a list of these commands and is called to execute them when
+		drawing.
+	Singleton:
+	Composite:
+	Factory:
+		Used to initialize a Shape Strategy depending on the selected mode (ie. if the mode
+		is Circle then the shape factory returns a Circle Strategy).
+	Builder:
+	Observer/Observable:
+		Redo, Undo and Clear buttons are observers on the model and enable themselves 
+		appropriately depending on the state of the model. Redo enables itself if there
+		is a command that can be redo'ed, undo enables itself if there is a command that
+		can be undo'ed and clear enables itself if there are any commands to delete.
+	... (any others you find useful) ...
+
+OTHER ARCHITECTURE DISCUSSIONS
+Improvement to PaintModel:
+	Instead of having an arraylist for each shape, we have an arraylist of classes 
+	that extend Shape. The abstract class Shape has abstract method draw. This allows
+	the PaintPanel to draw each Shape in the model.
